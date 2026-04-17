@@ -98,33 +98,20 @@ export default function CandidatesTable({ data, rawData  }: Props) {
 
         {/* BODY */}
         <TableBody>
-            {data.map((item, index) => (
-            <TableRow
-              key={index}
-              onClick={() =>
-                navigate(`/candidate/${item.email}`, {
-                  state: rawData,
-                })
-              }
-              sx={{ cursor: "pointer" }}
-            >
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.phone}</TableCell>
-              <TableCell>{item.email}</TableCell>
-              <TableCell>{item.profile}</TableCell>
-              <TableCell>{item.score}%</TableCell>
-              <TableCell>{item.score >= 70 ? "גבוה" : "בינוני"}</TableCell>
-            </TableRow>
-          ))}
           {data.map((item, index) => {
             const status = getStatus(item.score);
-
             const rowColor = status.color === "success" ? "#2e7d32" : "#f57c00";
 
             return (
               <TableRow
                 key={index}
+                onClick={() =>
+                  navigate(`/candidate/${item.email}`, {
+                    state: rawData,
+                  })
+                }
                 sx={{
+                  cursor: "pointer",
                   "& td": {
                     color: rowColor,
                     textAlign: "center",
