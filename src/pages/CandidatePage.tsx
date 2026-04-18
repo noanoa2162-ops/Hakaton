@@ -1,6 +1,6 @@
 import Dashboard from "../components/Dashboard";
-import CandidateDetails from "../components/CandidateDetails";
-import CandidatesTable from "../components/CandidatesTable";
+// import CandidateDetails from "../components/CandidateDetails";
+// import CandidatesTable from "../components/CandidatesTable";
 
 export type ApiData = {
   dashboard_view: {
@@ -46,15 +46,15 @@ const data = {
     score_reasons: ["ציונים גבוהים בפרמטרים מרכזיים"],
   },
 };
-const candidates = [
-  {
-    name: data.dashboard_view.full_name,
-    phone: data.dashboard_view.phone,
-    email: data.dashboard_view.email,
-    profile: "Frontend",
-    score: data.dashboard_view.match_percent,
-  },
-];
+// const candidates = [
+//   {
+//     name: data.dashboard_view.full_name,
+//     phone: data.dashboard_view.phone,
+//     email: data.dashboard_view.email,
+//     profile: "Frontend",
+//     score: data.dashboard_view.match_percent,
+//   },
+// ];
 
 export default function CandidatePage() {
   return (
