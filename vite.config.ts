@@ -11,6 +11,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/analyze/, '/analyze'),
       },
+      '/candidates': {
+        target: 'https://candicheck-last-agent.onrender.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/candidates/, '/candidates'),
+      },
     },
   },
 })
