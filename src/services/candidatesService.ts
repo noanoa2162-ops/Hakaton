@@ -36,8 +36,10 @@ export type CandidateResponse = {
   };
 };
 
+const BASE_URL = "https://candicheck-last-agent.onrender.com";
+
 export const fetchCandidatesList = async (): Promise<CandidateResponse[]> => {
-  const response = await fetch("/candidates", {
+  const response = await fetch(`${BASE_URL}/candidates`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +56,7 @@ export const fetchCandidatesList = async (): Promise<CandidateResponse[]> => {
 export const analyzeCandidateProfile = async (
   payload: CandidateAnalysisPayload
 ): Promise<CandidateResponse> => {
-  const response = await fetch("/analyze", {
+  const response = await fetch(`${BASE_URL}/analyze`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
