@@ -4,7 +4,6 @@ import {
   Button,
   Typography,
   Paper,
-  CircularProgress,
   Alert,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
