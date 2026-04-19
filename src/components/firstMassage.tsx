@@ -54,15 +54,18 @@ export default function FirstMassage() {
     setErrorMessage("");
 
     try {
-      await sendAnalysisData({
+      console.log("Sending data to server...");
+      const result = await sendAnalysisData({
         first_name: form.first_name,
         last_name: form.last_name,
         email: form.email,
         phone: form.phone,
       });
 
+      console.log("Server response:", result);
       setStep("success");
     } catch (error) {
+      console.error("Error in handleSubmit:", error);
       setErrorMessage(
         error instanceof Error ? error.message : "שגיאה בשליחת הנתונים"
       );

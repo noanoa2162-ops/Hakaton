@@ -30,14 +30,24 @@ app.get('/candidates', async (req, res) => {
 // API Proxy for analyze
 app.post('/analyze', async (req, res) => {
   try {
+    console.log('Sending data to analyze endpoint:', req.body);
+    
     const response = await axios.post(
       'https://3fy7gs-8080.csb.app/analyze',
-      req.body
+      req.body,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
-    res.json(response.data);
+    
+    console.log('Response from analyze endpoint:', response.data);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(response.data || { success: true, message: 'Analysis completed' });
   } catch (error) {
-    console.error('Error analyzing data:', error);
-    res.status(500).json({ error: 'שגיאה בשרת' });
+    console.error('Error analyzing data:', error.message);
+    res.status(500).json({ error: 'שגיאה בשרת', details: error.message });
   }
 });
 
