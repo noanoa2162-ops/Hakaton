@@ -19,7 +19,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import PercentIcon from "@mui/icons-material/Percent";
 import InfoIcon from "@mui/icons-material/Info";
 import { useNavigate } from "react-router-dom";
-import { fetchCandidatesList, CandidateResponse } from "../services/candidatesService";
+import { fetchCandidatesList, type CandidateResponse } from "../services/candidatesService";
 
 type Candidate = {
   name: string;
