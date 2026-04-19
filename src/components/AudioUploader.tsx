@@ -5,13 +5,18 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SendIcon from "@mui/icons-material/Send";
+import CheckingData from "./CheckingData";
+import SuccessMessage from "./SuccessMessage";
+import { uploadAudioFile } from "../services/audioAnalysisService";
 
 export default function AudioUploader() {
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<"form" | "loading" | "success">("form");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // בחירת קובץ
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,14 +29,23 @@ export default function AudioUploader() {
   const handleUpload = async () => {
     if (!file) return;
 
-    setLoading(true);
+    setStep("loading");
+    setErrorMessage("");
 
-    // סימולציה של העלאה
-    await new Promise((res) => setTimeout(res, 2000));
-
-    setLoading(false);
-    alert("הקובץ נשלח בהצלחה 🎉");
+    try {
+      await uploadAudioFile(file);
+      setStep("success");
+    } catch (error) {
+      console.error("Error in handleUpload:", error);
+      setErrorMessage(
+        error instanceof Error ? error.message : "שגיאה בשליחת הקובץ"
+      );
+      setStep("form");
+    }
   };
+
+  if (step === "loading") return <CheckingData />;
+  if (step === "success") return <SuccessMessage />;
 
   return (
     <Box
@@ -62,6 +76,13 @@ export default function AudioUploader() {
           העלאת קובץ שמע
         </Typography>
 
+        {/* הודעת שגיאה */}
+        {errorMessage && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
         {/* כפתור בחירת קובץ */}
         <Button
           variant="outlined"
@@ -82,24 +103,20 @@ export default function AudioUploader() {
           <Typography sx={{ mb: 2 }}>{file.name}</Typography>
         )}
 
-        {/* אנימציית טעינה */}
-        {loading ? (
-          <CircularProgress sx={{ color: "#e53935", mt: 2 }} />
-        ) : (
-          <Button
-            variant="contained"
-            endIcon={<SendIcon />}
-            onClick={handleUpload}
-            disabled={!file}
-            sx={{
-              mt: 2,
-              background: "#e53935",
-              "&:hover": { background: "#c62828" },
-            }}
-          >
-            שלח קובץ
-          </Button>
-        )}
+        {/* כפתור שליחה */}
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={handleUpload}
+          disabled={!file}
+          sx={{
+            mt: 2,
+            background: "#e53935",
+            "&:hover": { background: "#c62828" },
+          }}
+        >
+          שלח קובץ
+        </Button>
       </Paper>
     </Box>
   );
