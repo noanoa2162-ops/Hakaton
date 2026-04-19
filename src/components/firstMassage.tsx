@@ -239,6 +239,21 @@ if (step === "success") return <SuccessMessage />;
         >
           שליחה
         </Button>
+
+        {/* כפתור ניווט זמני לבדיקה */}
+        <Button
+          fullWidth
+          variant="text"
+          onClick={() => navigate("/upload")}
+          sx={{
+            mt: 2,
+            color: "#e53935",
+            fontSize: "0.8rem",
+            textDecoration: "underline"
+          }}
+        >
+          מעבר להעלאת שמע (לבדיקה)
+        </Button>
       </Paper>
     </Box>
   );
