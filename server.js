@@ -8,45 +8,43 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const API_URL = process.env.API_URL || 'http://localhost:8080';
 const distPath = path.join(__dirname, 'dist');
 
 // Middleware
 app.use(express.json());
 app.use(express.static(distPath));
 
+console.log(`🔗 API backend URL: ${API_URL}`);
+
 // API Proxy for candidates
 app.get('/candidates', async (req, res) => {
   try {
-    const response = await axios.get(
-      'https://candicheck-last-agent.onrender.com/candidates'
-    );
+    const response = await axios.get(`${API_URL}/candidates`);
     res.json(response.data);
   } catch (error) {
-    console.error('Error fetching candidates:', error);
-    res.status(500).json({ error: 'שגיאה בשרת' });
+    console.error('Error fetching candidates:', error.message);
+    res.status(500).json({ error: 'שגיאה בשרת', details: error.message });
   }
 });
 
 // API Proxy for analyze
 app.post('/analyze', async (req, res) => {
   try {
-    console.log('Sending data to analyze endpoint:', req.body);
-    
+    console.log('📤 Sending to backend:', req.body);
     const response = await axios.post(
-      'https://3fy7gs-8080.csb.app/analyze',
+      `${API_URL}/analyze`,
       req.body,
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 120000, // 2 minutes - AI takes time
       }
     );
-    
-    console.log('Response from analyze endpoint:', response.data);
+    console.log('✅ Backend response received');
     res.setHeader('Content-Type', 'application/json');
-    res.json(response.data || { success: true, message: 'Analysis completed' });
+    res.json(response.data);
   } catch (error) {
-    console.error('Error analyzing data:', error.message);
+    console.error('❌ Error:', error.message);
     res.status(500).json({ error: 'שגיאה בשרת', details: error.message });
   }
 });
@@ -57,5 +55,6 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Frontend server on port ${PORT}`);
+  console.log(`🔗 Backend API: ${API_URL}`);
 });

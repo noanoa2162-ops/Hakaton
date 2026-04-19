@@ -8,8 +8,8 @@ import {
   Alert,
 } from "@mui/material";
 import CheckingData from "./CheckingData";
-import SuccessMessage from "././SuccessMessage";
 import { sendAnalysisData } from "../services/analysisService";
+import type { ApiData } from "../pages/CandidatePage";
 
 type FormData = {
   first_name: string;
@@ -18,8 +18,12 @@ type FormData = {
   phone?: string;
 };
 
-export default function FirstMassage() {
-    const [step, setStep] = useState<"form" | "loading" | "success">("form");
+type Props = {
+  onAnalysisComplete?: (data: ApiData) => void;
+};
+
+export default function FirstMassage({ onAnalysisComplete }: Props) {
+    const [step, setStep] = useState<"form" | "loading">("form");
   const [form, setForm] = useState<FormData>({
     first_name: "",
     last_name: "",
@@ -63,7 +67,14 @@ export default function FirstMassage() {
       });
 
       console.log("Server response:", result);
-      setStep("success");
+      
+      // Pass the analysis result to parent (Dashboard)
+      if (result.success && result.analysis && onAnalysisComplete) {
+        onAnalysisComplete(result.analysis);
+      } else {
+        setErrorMessage("התקבלה תשובה לא תקינה מהשרת");
+        setStep("form");
+      }
     } catch (error) {
       console.error("Error in handleSubmit:", error);
       setErrorMessage(
@@ -73,7 +84,6 @@ export default function FirstMassage() {
     }
   };
 if (step === "loading") return <CheckingData />;
-if (step === "success") return <SuccessMessage />;
   return (
     <Box
       dir="rtl"

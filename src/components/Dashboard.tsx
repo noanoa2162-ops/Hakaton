@@ -38,8 +38,8 @@ const candidates: Candidate[] = [
     name: data.dashboard_view.full_name,
     phone: data.dashboard_view.phone,
     email: data.dashboard_view.email,
-    profile: "Frontend",
-    score: data.dashboard_view.match_percent,
+    profile: data.dashboard_view.status || "מועמד",
+    score: Math.round(data.dashboard_view.match_percent * 10),
   },
 ];
 

@@ -5,16 +5,9 @@ type AnalysisPayload = {
   phone?: string;
 };
 
-export const sendAnalysisData = async (data: AnalysisPayload) => {
-  const payload = {
-    first_name: data.first_name,
-    last_name: data.last_name,
-    email: data.email,
-    ...(data.phone && { phone: data.phone }),
-  };
-
+export const sendAnalysisData = async (payload: AnalysisPayload) => {
   try {
-    console.log("📤 Starting fetch request with payload:", payload);
+    console.log("📤 Sending analysis request:", payload);
 
     const response = await fetch("/analyze", {
       method: "POST",
@@ -25,33 +18,16 @@ export const sendAnalysisData = async (data: AnalysisPayload) => {
     });
 
     console.log("📨 Response status:", response.status);
-    console.log("📨 Response headers:", response.headers);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("❌ Server error response:", errorText);
-      throw new Error(`שגיאה בשרת: ${response.statusText}`);
+      console.error("❌ Server error:", errorText);
+      throw new Error(`שגיאה בשרת: ${response.status} ${response.statusText}`);
     }
 
-    const contentType = response.headers.get("content-type");
-    console.log("📨 Content-Type:", contentType);
-
-    if (!contentType || !contentType.includes("application/json")) {
-      console.warn("⚠️ Response is not JSON, assuming success");
-      return { success: true };
-    }
-
-    const text = await response.text();
-    console.log("📨 Response text:", text);
-
-    if (!text) {
-      console.warn("⚠️ Empty response body, assuming success");
-      return { success: true };
-    }
-
-    const data = JSON.parse(text);
-    console.log("✅ Parsed response:", data);
-    return data;
+    const result = await response.json();
+    console.log("✅ Analysis result:", result);
+    return result;
   } catch (error) {
     console.error("❌ Error in sendAnalysisData:", error);
     throw error;

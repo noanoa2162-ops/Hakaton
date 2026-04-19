@@ -17,9 +17,12 @@ import { useLocation } from "react-router-dom";
 
 export default function CandidateDetails() {
 const location = useLocation();
-  const data = location.state;
+  const rawData = location.state;
 let list: string[] = [];
-  if (!data) return <div>אין נתונים</div>;
+  if (!rawData) return <div>אין נתונים</div>;
+
+  // Support both direct data and wrapped {analysis: ...} format
+  const data = rawData.analysis || rawData;
 
   const graphLabels: Record<string, string> = {
     communication: "תקשורת",

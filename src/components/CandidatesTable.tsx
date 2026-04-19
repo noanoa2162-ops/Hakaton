@@ -171,7 +171,7 @@ export default function CandidatesTable({ data, rawData }: Props) {
                     key={index}
                     onClick={() =>
                       navigate(`/candidate/${item.email}`, {
-                        state: apiData[index] || rawData,
+                        state: apiData[index]?.analysis || rawData,
                       })
                     }
                     sx={{
